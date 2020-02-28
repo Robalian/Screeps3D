@@ -177,7 +177,7 @@ namespace Screeps3D.Rooms
 
                     message.AppendLine($"Going to {roomName} lastPvpTime: {lastPvpTime}");
 
-                    TwitchClient.Instance.SendMessage(message.ToString());
+                    TwitchClient.Instance.SendTwitchMessage(message.ToString());
 
                     this.GetAndChooseRoom(roomName);
                 }
