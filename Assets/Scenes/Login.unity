@@ -6117,7 +6117,7 @@ MonoBehaviour:
   _removeServer: {fileID: 1059910560}
   _editServer: {fileID: 1236476658}
   _exit: {fileID: 594324827}
-  _chooseSS3UnifiedCredentialsFileLocationPopup: {fileID: 0}
+  _chooseSS3UnifiedCredentialsFileLocationPopup: {fileID: 1080791792}
   _editServerPopup: {fileID: 678213046}
   secret: abc123
 --- !u!114 &1032182220
