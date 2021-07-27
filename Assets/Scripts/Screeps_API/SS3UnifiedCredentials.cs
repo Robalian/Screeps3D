@@ -95,7 +95,9 @@ namespace Assets.Scripts.Screeps_API
             var validFileNames = new List<string>
             {
                 "config.yaml",
-                "config.yml"
+                "config.yml",
+                "screeps.yaml",
+                "screeps.yml"
             };
 
             var validFileNamesInAScreepsFolder = validFileNames.Select(f => Path.Combine("screeps", f));
