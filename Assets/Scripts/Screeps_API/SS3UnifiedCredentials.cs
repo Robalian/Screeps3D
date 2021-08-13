@@ -237,9 +237,10 @@ namespace Assets.Scripts.Screeps_API
                 document.Servers.Add(server.Key, yamlServer);
             };
 
-            if (server.Key != oldKey)
+            // replace oldkey with a new entry
+            if (server.Key != oldKey && oldKey != null)
             {
-                document.Servers.Remove(oldKey);
+                document.Servers.Remove(oldKey); 
                 document.Servers.Add(server.Key, yamlServer);
             }
 
