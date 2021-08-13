@@ -136,7 +136,7 @@ namespace Screeps_API
 
         private void OnAddServer()
         {
-            PlayerInput.Get("Server Hostname\n<size=12>example: 127.0.0.1</size>", OnSubmitServer);
+            PlayerInput.Get("Server Hostname\n<size=12>example: \n127.0.0.1 | http://127.0.0.1:21025 | servername </size>", OnSubmitServer);
         }
 
         private void OnSubmitServer(string input)
@@ -171,7 +171,10 @@ namespace Screeps_API
 
                 if (protocol.ToLowerInvariant() == "https" || port == "443")
                 {
-                    port = "443";
+                    if (string.IsNullOrEmpty(port))
+                    {
+                        port = "443";
+                    }
 
                     ss3Server.Address.Ssl = true;
                 }
@@ -190,9 +193,9 @@ namespace Screeps_API
 
             _servers.Add(ss3Server);
 
-            OnServerChange(_servers.IndexOf(ss3Server));
+            OnServerSelected(ss3Server);
 
-            UpdateServerList();
+            OnEditServer();
         }
 
         private void OnServerSelected(IScreepsServer server)
