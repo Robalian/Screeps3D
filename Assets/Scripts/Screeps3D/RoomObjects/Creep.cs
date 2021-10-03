@@ -81,6 +81,8 @@ namespace Screeps3D.RoomObjects
 
         public Vector3? ActionTarget { get; set; }
 
+        public Texture2D? _storeTexture;
+
         internal Creep()
         {
             Body = new CreepBody();
@@ -180,13 +182,19 @@ namespace Screeps3D.RoomObjects
                 Rotation = Quaternion.LookRotation(newForward);
         }
 
-        public Texture2D CreateStoreTexture()
+
+        public void UpdateStoreTexture()
         {
             this.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
             List<string> resources = new List<string>(this.Store.Keys);
 
             int height = 1000;
             int width = 10;
+            if (_storeTexture == null)
+            {
+                Debug.Log("Creep without store texture - creating a new one");
+                _storeTexture = new Texture2D(width, height);
+            }
             float yStep = 0.01f;
 
             int resourceIndex = 0;
@@ -194,9 +202,6 @@ namespace Screeps3D.RoomObjects
             float nextResourceAt = 1000 * percent;
             Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
 
-            Texture2D texture = new Texture2D(width, height);
-            // Debug.LogError("Resources to draw " + resources.Count);
-            // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
             for (int y = 0; y < height; y++)
             {
                 if (y >= nextResourceAt)
@@ -213,16 +218,14 @@ namespace Screeps3D.RoomObjects
                         nextResourceAt = y + 1000 * percent;
                     }
                     color = Constants.GetComplexResourceColor(resources[resourceIndex]);
-                    // Debug.LogError("Current " + resources[resourceIndex] + " [" + color.ToString() + "][" + this.Store[resources[resourceIndex]] + "][" + this.TotalResources + "][" + percent + "][" + nextResourceAt.ToString() + "]");
                 }
 
                 for (int x = 0; x < Mathf.CeilToInt(width); x++)
                 {
-                    texture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
+                    _storeTexture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
                 }
             }
-            texture.Apply();
-            return texture;
+            _storeTexture.Apply();
         }
     }
 }
