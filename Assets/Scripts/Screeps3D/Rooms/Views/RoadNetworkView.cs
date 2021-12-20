@@ -40,6 +40,12 @@ namespace Screeps3D.Rooms.Views
 
         private void AssignRoad(int x, int y)
         {
+            if (_roadPrototype == null)
+            {
+                Debug.LogWarning($"roadprototype is null trying to instantiate {x}{y}");
+                return;
+            }
+
             roads[x, y] = Instantiate(_roadPrototype.gameObject).GetComponent<RoadView>();
             roads[x, y].Init(this, x, y);
             roads[x, y].transform.SetParent(transform, false);
