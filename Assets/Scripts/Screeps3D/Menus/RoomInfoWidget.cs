@@ -68,6 +68,11 @@ namespace Assets.Scripts.Screeps3D.Menus
 
         private void OnRoomData(JSONObject obj)
         {
+            if (transform == null)
+            {
+                return;
+            }
+
             // We don't have players in room, we might want that, we might also want room objects seperated by players? we can do this later
             //playerPositionRoom.Objects
             var data = new Dictionary<ScreepsUser, Dictionary<string, int>>();
@@ -170,6 +175,18 @@ namespace Assets.Scripts.Screeps3D.Menus
             if (playerPositionRoom != null)
             {
                 playerPositionRoom.ObjectStream.OnData += OnRoomData;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            // https://answers.unity.com/questions/1346191/random-occuring-nullreferenceexception.html
+            PlayerPosition.Instance.OnRoomChange -= OnRoomChange;
+
+            playerPositionRoom = PlayerPosition.Instance.Room;
+            if (playerPositionRoom != null)
+            {
+                playerPositionRoom.ObjectStream.OnData -= OnRoomData;
             }
         }
     }
