@@ -27,7 +27,7 @@ namespace Screeps3D.RoomObjects.Views
         public void Delta(JSONObject data)
         {
             AdjustScale();
-            UpdateStore();
+            //UpdateStore();
         }
 
         public void Unload(RoomObject roomObject)
@@ -35,7 +35,7 @@ namespace Screeps3D.RoomObjects.Views
         }
         private void UpdateStore()
         {
-            UpdateStoreTexture();
+            //UpdateStoreTexture();
 
             _containerStore.materials[0].SetFloat("xSize", .2f);
             _containerStore.materials[0].SetFloat("ySize", .2f);

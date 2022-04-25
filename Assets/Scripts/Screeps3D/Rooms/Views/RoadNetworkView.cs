@@ -26,14 +26,21 @@ namespace Screeps3D.Rooms.Views
 
         private void UnpackRoads(JSONObject roadObj)
         {
-            foreach (var posArray in roadObj.list)
+            try
             {
-                var x = (int) posArray.list[0].n;
-                var y = (int) posArray.list[1].n;
-                if (roads[x, y] == null)
+                foreach (var posArray in roadObj.list)
                 {
-                    Scheduler.Instance.Add(() => AssignRoad(x, y));
+                    var x = (int)posArray.list[0].n;
+                    var y = (int)posArray.list[1].n;
+                    if (roads[x, y] == null)
+                    {
+                        Scheduler.Instance.Add(() => AssignRoad(x, y));
+                    }
                 }
+            }
+            catch (MissingSingletonException ex)
+            {
+                Debug.LogException(ex);
             }
             // TODO: Cull destroyed roads
         }

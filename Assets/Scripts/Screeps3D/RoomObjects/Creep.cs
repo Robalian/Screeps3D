@@ -81,8 +81,6 @@ namespace Screeps3D.RoomObjects
 
         public Vector3? ActionTarget { get; set; }
 
-        public Texture2D? _storeTexture;
-
         internal Creep()
         {
             Body = new CreepBody();
@@ -183,49 +181,6 @@ namespace Screeps3D.RoomObjects
         }
 
 
-        public void UpdateStoreTexture()
-        {
-            this.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-            List<string> resources = new List<string>(this.Store.Keys);
-
-            int height = 1000;
-            int width = 10;
-            if (_storeTexture == null)
-            {
-                Debug.Log("Creep without store texture - creating a new one");
-                _storeTexture = new Texture2D(width, height);
-            }
-            float yStep = 0.01f;
-
-            int resourceIndex = 0;
-            float percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
-            float nextResourceAt = 1000 * percent;
-            Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
-
-            for (int y = 0; y < height; y++)
-            {
-                if (y >= nextResourceAt)
-                {
-                    resourceIndex += 1;
-                    if (resourceIndex >= resources.Count)
-                    {
-                        resourceIndex -= 1;
-                        nextResourceAt = height + 1;
-                    }
-                    else
-                    {
-                        percent = (float)System.Math.Round(this.Store[resources[resourceIndex]] / this.TotalResources, 3);
-                        nextResourceAt = y + 1000 * percent;
-                    }
-                    color = Constants.GetComplexResourceColor(resources[resourceIndex]);
-                }
-
-                for (int x = 0; x < Mathf.CeilToInt(width); x++)
-                {
-                    _storeTexture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
-                }
-            }
-            _storeTexture.Apply();
-        }
+        
     }
 }

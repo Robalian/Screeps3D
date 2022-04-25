@@ -51,6 +51,13 @@ namespace Screeps3D.Rooms.Views
 
         public void Load(int x, int y, MapView mapView)
         {
+            if (mapView == null)
+            {
+                Debug.LogError($"mapview dot at {x},{y} can not be added, mapview is null");
+                return;
+
+            }
+
             X = x;
             Y = y;
             _mapView = mapView;

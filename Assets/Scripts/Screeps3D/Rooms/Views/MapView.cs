@@ -57,7 +57,7 @@ namespace Screeps3D.Rooms.Views
 
         private void OnMapData(JSONObject data)
         {
-            ClearDots();
+            //ClearDots();
             // ClearObjects();
 
             if (Room.ShowingObjects)
@@ -182,6 +182,11 @@ namespace Screeps3D.Rooms.Views
             _dots[x, y] = null;
         }
 
+        private void OnDestroy()
+        {
+            Room.MapStream.OnData -= OnMapData;
+            Room.OnShowObjects -= OnShowObjects;
+        }
 
     }
 }

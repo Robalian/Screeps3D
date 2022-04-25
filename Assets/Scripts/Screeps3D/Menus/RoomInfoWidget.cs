@@ -22,13 +22,16 @@ namespace Assets.Scripts.Screeps3D.Menus
         // Use this for initialization
         void Start()
         {
+            PoolLoader.Preload(RoomInfoPlayerWidgetPrefab, 2);
+        }
+
+        private void Awake()
+        {
             // Start with a clean slate.
             foreach (Transform child in this.transform)
             {
                 Destroy(child.gameObject);
             }
-
-            PoolLoader.Preload(RoomInfoPlayerWidgetPrefab, 2);
         }
 
         private void OnEnable()
@@ -172,21 +175,27 @@ namespace Assets.Scripts.Screeps3D.Menus
 
         private void OnDisable()
         {
-            if (playerPositionRoom != null)
+            if (playerPositionRoom != null && playerPositionRoom.ObjectStream != null)
             {
-                playerPositionRoom.ObjectStream.OnData += OnRoomData;
+                playerPositionRoom.ObjectStream.OnData -= OnRoomData;
             }
         }
 
         private void OnDestroy()
         {
             // https://answers.unity.com/questions/1346191/random-occuring-nullreferenceexception.html
-            PlayerPosition.Instance.OnRoomChange -= OnRoomChange;
-
-            playerPositionRoom = PlayerPosition.Instance.Room;
-            if (playerPositionRoom != null)
+            try
             {
-                playerPositionRoom.ObjectStream.OnData -= OnRoomData;
+                PlayerPosition.Instance.OnRoomChange -= OnRoomChange;
+
+                if (playerPositionRoom != null)
+                {
+                    playerPositionRoom.ObjectStream.OnData -= OnRoomData;
+                }
+            }
+            catch (MissingSingletonException ex)
+            {
+                Debug.LogException(ex);
             }
         }
     }

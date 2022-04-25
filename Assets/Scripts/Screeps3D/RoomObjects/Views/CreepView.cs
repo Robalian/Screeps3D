@@ -8,6 +8,8 @@ namespace Screeps3D.RoomObjects.Views
 {
     internal class CreepView : ObjectView
     {
+        private const int STORAGE_HEIGHT = 1000;
+        private const int STORAGE_WIDTH = 10;
         [SerializeField] private Renderer _badge = default;
         [SerializeField] private Renderer _creepCore = default;
         [SerializeField] private Renderer _creepStore = default;
@@ -29,9 +31,18 @@ namespace Screeps3D.RoomObjects.Views
 
         private Color32 _initialUnderlightColor;
 
+        public Texture2D? _storeTexture;
+
         private void Awake()
         {
             _initialUnderlightColor = _underLight.color;
+            int height = STORAGE_HEIGHT;
+            int width = STORAGE_WIDTH;
+            //if (_storeTexture == null)
+            //{
+            //    Debug.Log("Creep without store texture - creating a new one");
+            //    _storeTexture = new Texture2D(width, height);
+            //}
         }
 
         private void setWings(bool setWings)
@@ -116,8 +127,9 @@ namespace Screeps3D.RoomObjects.Views
             _creepStore.materials[0].SetFloat("xSize", 0.2f);
             _creepStore.materials[0].SetFloat("EmissionStrength", .05f);
 
-            _creep.UpdateStoreTexture();
-            _creepStore.materials[0].SetTexture("EmissionTexture", _creep._storeTexture);
+            // TODO: triggering updatestore texture and afterwards set visibility on with such a fast tickrate might also be the cause for it crashing.
+            //UpdateStoreTexture();
+            _creepStore.materials[0].SetTexture("EmissionTexture", _storeTexture);
 
             _creepStoreDisplay.SetVisibility(storeUsage);
         }
@@ -160,7 +172,10 @@ namespace Screeps3D.RoomObjects.Views
             }
 
             ScaleCreepSize();
+
+            // TODO: we should only update the store if data has changed.
             RenderCreepStore();
+
             _dead = _dead || _creep.TTL == 1;
             if (_dead)
             {
@@ -197,6 +212,46 @@ namespace Screeps3D.RoomObjects.Views
                     Time.deltaTime * 5);
             }
 
+        }
+
+        public void UpdateStoreTexture()
+        {
+            _creep.Store.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+            List<string> resources = new List<string>(_creep.Store.Keys);
+
+            int height = STORAGE_HEIGHT;
+            int width = STORAGE_WIDTH;
+            float yStep = 0.01f;
+
+            int resourceIndex = 0;
+            float percent = (float)System.Math.Round(_creep.Store[resources[resourceIndex]] / _creep.TotalResources, 3);
+            float nextResourceAt = 1000 * percent;
+            Color color = Constants.GetComplexResourceColor(resources[resourceIndex]);
+
+            for (int y = 0; y < height; y++)
+            {
+                if (y >= nextResourceAt)
+                {
+                    resourceIndex += 1;
+                    if (resourceIndex >= resources.Count)
+                    {
+                        resourceIndex -= 1;
+                        nextResourceAt = height + 1;
+                    }
+                    else
+                    {
+                        percent = (float)System.Math.Round(_creep.Store[resources[resourceIndex]] / _creep.TotalResources, 3);
+                        nextResourceAt = y + 1000 * percent;
+                    }
+                    color = Constants.GetComplexResourceColor(resources[resourceIndex]);
+                }
+
+                for (int x = 0; x < Mathf.CeilToInt(width); x++)
+                {
+                    _storeTexture.SetPixel(Mathf.CeilToInt(x), Mathf.CeilToInt(y), color);
+                }
+            }
+            _storeTexture.Apply();
         }
     }
 }
