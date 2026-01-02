@@ -205,52 +205,125 @@ namespace Screeps3D
             {4, 100000}
         };
 
+        static readonly Dictionary<string, Color> BoostBaseColors = new Dictionary<string, Color> {
+            {Constants.BaseMineral.Utrium, new Color32(80,215,249,255)},
+            {Constants.BaseMineral.Lemergium, new Color32(0,244,162,255)},
+            {Constants.BaseMineral.Zynthium, new Color32(253,211,136,255)},
+            {Constants.BaseMineral.Keanium, new Color32(160,113,255,255)},
+            {Constants.BaseMineral.Oxygen, new Color32(205,205,205,255)},
+            {Constants.BaseMineral.Hydrogen, new Color32(205,205,205,255)},
+            {Constants.BaseMineral.Catalyst, new Color32(255,119,119,255)},
+            {"G", new Color32(240,240,240,255)},
+        };
+
         public static readonly Dictionary<string, Color> ResourceColors = new Dictionary<string, Color> {
             {"other", new Color32(204, 204, 204, 255)},
             {"energy", new Color32(118, 93, 0, 255)},
             {"power", new Color32(255, 0, 0, 255)},
-            {"battery", new Color32(217, 213, 0, 255)},
+            {"ops", new Color32(255, 255, 0, 255)},
             // MINERALS
-            {Constants.BaseMineral.Hydrogen, new   Color32(205,205,205,255)},
-            {Constants.BaseMineral.Oxygen, new   Color32(205,205,205,255)},
-            {Constants.BaseMineral.Utrium, new   Color32(80,215,249,255)},
-            {Constants.BaseMineral.Keanium, new   Color32(160,113,255,255)},
-            {Constants.BaseMineral.Lemergium, new   Color32(0,244,162,255)},
-            {Constants.BaseMineral.Zynthium, new   Color32(253,211,136,255)},
-            {Constants.BaseMineral.Catalyst, new   Color32(255,119,119,255)},
+            {Constants.BaseMineral.Utrium, BoostBaseColors[Constants.BaseMineral.Utrium]},
+            {Constants.BaseMineral.Lemergium, BoostBaseColors[Constants.BaseMineral.Lemergium]},
+            {Constants.BaseMineral.Zynthium, BoostBaseColors[Constants.BaseMineral.Zynthium]},
+            {Constants.BaseMineral.Keanium, BoostBaseColors[Constants.BaseMineral.Keanium]},
+            {Constants.BaseMineral.Oxygen, BoostBaseColors[Constants.BaseMineral.Oxygen]},
+            {Constants.BaseMineral.Hydrogen, BoostBaseColors[Constants.BaseMineral.Hydrogen]},
+            {Constants.BaseMineral.Catalyst, BoostBaseColors[Constants.BaseMineral.Catalyst] },
             // GHODIUM
-            {"G", new   Color32(240,240,240,255)},
+            {"G", BoostBaseColors["G"]},
+            // COMPRESSED RESOURCES
+            {"utrium_bar", new Color32(80,215,249,255)},
+            {"lemergium_bar", new Color32(0,244,162,255)},
+            {"zynthium_bar", new Color32(253,211,136,255)},
+            {"keanium_bar", new Color32(160,113,255,255)},
+            {"ghodium_melt", new Color32(240,240,240,255)},
+            {"oxidant", new Color32(205,205,205,255)},
+            {"reductant", new Color32(205,205,205,255)},
+            {"purifier", new Color32(255,119,119,255)},
+            {"battery", new Color32(217, 213, 0, 255)},
             // DEPOSITS
-            {Constants.BaseDeposit.Biomass, new   Color32(38,110,0,255)},
-            {Constants.BaseDeposit.Metal, new   Color32(128,58,0,255)},
-            {Constants.BaseDeposit.Mist, new   Color32(97,0,128,255)},
-            {Constants.BaseDeposit.Silicon, new   Color32(0,102,128,255)}
+            {Constants.BaseDeposit.Biomass, new Color32(38,110,0,255)},
+            {Constants.BaseDeposit.Metal, new Color32(128,58,0,255)},
+            {Constants.BaseDeposit.Mist, new Color32(97,0,128,255)},
+            {Constants.BaseDeposit.Silicon, new Color32(0,102,128,255)},
+            // COMMON HIGHER COMMODITIES
+            {"composite", new Color32(240,240,240,255)},
+            {"crystal", new Color32(240,240,240,255)},
+            {"liquid", new Color32(240,240,240,255)},
+            // HIGHER COMMODITIES
+            {"wire", new Color32(0,102,128,255)},
+            {"switch", new Color32(0,102,128,255)},
+            {"transistor", new Color32(0,102,128,255)},
+            {"microchip", new Color32(0,102,128,255)},
+            {"circuit", new Color32(0,102,128,255)},
+            {"device", new Color32(0,102,128,255)},
+            {"cell", new Color32(38,110,0,255)},
+            {"phlegm", new Color32(38,110,0,255)},
+            {"tissue", new Color32(38,110,0,255)},
+            {"muscle", new Color32(38,110,0,255)},
+            {"organoid", new Color32(38,110,0,255)},
+            {"organism", new Color32(38,110,0,255)},
+            {"alloy", new Color32(128,58,0,255)},
+            {"tube", new Color32(128,58,0,255)},
+            {"fixtures", new Color32(128,58,0,255)},
+            {"frame", new Color32(128,58,0,255)},
+            {"hydraulics", new Color32(128,58,0,255)},
+            {"machine", new Color32(128, 58, 0, 255)},
+            {"condensate", new Color32(97,0,128,255)},
+            {"concentrate", new Color32(97,0,128,255)},
+            {"extract", new Color32(97,0,128,255)},
+            {"spirit", new Color32(97,0,128,255)},
+            {"emanation", new Color32(97,0,128,255)},
+            {"essence", new Color32(97,0,128,255)},
+            // MINERAL COMPOUNDS
+            {"OH", new Color32(180,180,180,255)},
+            {"ZK", new Color32(180,180,180,255)},
+            {"UL", new Color32(180,180,180,255)},
+            {"UH", BoostBaseColors[Constants.BaseMineral.Utrium]},
+            {"UH2O", BoostBaseColors[Constants.BaseMineral.Utrium]},
+            {"XUH2O", BoostBaseColors[Constants.BaseMineral.Utrium]},
+            {"UO", BoostBaseColors[Constants.BaseMineral.Utrium]},
+            {"UHO2", BoostBaseColors[Constants.BaseMineral.Utrium]},
+            {"XUHO2", BoostBaseColors[Constants.BaseMineral.Utrium]},
+            {"KH", BoostBaseColors[Constants.BaseMineral.Keanium]},
+            {"KH2O", BoostBaseColors[Constants.BaseMineral.Keanium]},
+            {"XKH2O", BoostBaseColors[Constants.BaseMineral.Keanium]},
+            {"KO", BoostBaseColors[Constants.BaseMineral.Keanium]},
+            {"KHO2", BoostBaseColors[Constants.BaseMineral.Keanium]},
+            {"XKHO2", BoostBaseColors[Constants.BaseMineral.Keanium]},
+            {"LH", BoostBaseColors[Constants.BaseMineral.Lemergium]},
+            {"LH2O", BoostBaseColors[Constants.BaseMineral.Lemergium]},
+            {"XLH2O", BoostBaseColors[Constants.BaseMineral.Lemergium]},
+            {"LO", BoostBaseColors[Constants.BaseMineral.Lemergium]},
+            {"LHO2", BoostBaseColors[Constants.BaseMineral.Lemergium]},
+            {"XLHO2", BoostBaseColors[Constants.BaseMineral.Lemergium]},
+            {"ZH", BoostBaseColors[Constants.BaseMineral.Zynthium]},
+            {"ZH2O", BoostBaseColors[Constants.BaseMineral.Zynthium]},
+            {"XZH2O", BoostBaseColors[Constants.BaseMineral.Zynthium]},
+            {"ZO", BoostBaseColors[Constants.BaseMineral.Zynthium]},
+            {"ZHO2", BoostBaseColors[Constants.BaseMineral.Zynthium]},
+            {"XZHO2", BoostBaseColors[Constants.BaseMineral.Zynthium]},
+            {"GH", BoostBaseColors["G"]},
+            {"GH2O", BoostBaseColors["G"]},
+            {"XGH2O", BoostBaseColors["G"]},
+            {"GO", BoostBaseColors["G"]},
+            {"GHO2", BoostBaseColors["G"]},
+            {"XGHO2", BoostBaseColors["G"]},
         };
 
         public static Color GetComplexResourceColor(string resourceType)
         {
             if (ResourcesAll.Contains(resourceType) == false)
             {
-                Debug.LogWarning("Unsupported mineralType (not in ResourcesAll)");
+                Debug.LogWarning("Unsupported resourceType \"" + resourceType + "\" (not in ResourcesAll)");
                 return ResourceColors["other"];
             }
             if (ResourceColors.ContainsKey(resourceType) == true)
             {
-                // simple resource
                 return ResourceColors[resourceType];
             }
-            if (Char.IsUpper(resourceType.ToCharArray(0, 1)[0]) == false)
-            {
-                Debug.LogWarning("Unsupported mineralType (deposit/commodity) [" + resourceType.ToCharArray(0, 1) + "]");
-                return new Color32(0, 0, 0, 255);
-            }
-            if (resourceType.Length == 5)
-            {
-                // from XUH2O we want the U
-                return ResourceColors[resourceType[1].ToString()];
-            }
-            // from anything else we want 1st characer UH, ZK, KHO2 etc
-            return ResourceColors[resourceType[0].ToString()];
+            Debug.LogWarning("Unsupported resourceType \"" + resourceType + "\" (not in ResourceColors)");
+            return new Color32(0, 0, 0, 255);
         }
 
         public static class BaseMineral
