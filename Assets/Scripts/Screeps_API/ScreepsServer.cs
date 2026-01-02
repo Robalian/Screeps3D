@@ -52,11 +52,10 @@ namespace Screeps_API
             }
 
             // Assist with merging
-            if (server.Host.ToLowerInvariant().EndsWith("screeps.com"))
+            if (server.Host.ToLowerInvariant().Equals("screeps.com"))
             {
                 this.Official = true;
                 
-
                 this.Name = $"Screeps.com";
 
                 if (this.Address.Path == "/ptr")

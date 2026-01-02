@@ -158,8 +158,8 @@ namespace Assets.Scripts.Screeps_API
                 Debug.Log($"Found config at {configPath}");
 
                 var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(new CamelCaseNamingConvention())
-                .Build();
+                    .WithNamingConvention(new CamelCaseNamingConvention())
+                    .Build();
 
                 // initially, a config path is set, but the file does not exist yet.
                 if (!File.Exists(configPath))

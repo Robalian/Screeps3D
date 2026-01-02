@@ -32,7 +32,7 @@ namespace Screeps3D
             {
                 Debug.Log($"Getting world status");
 
-                ScreepsAPI.Http.GetWorldStatus(GetWorldStatusCallback);
+                ScreepsAPI.Http.GetWorldStatus(GetWorldStatusCallback, null, true);
                 
                 // https://docs.screeps.com/auth-tokens.html#Rate-Limiting
                 yield return new WaitForSecondsRealtime(10); // Official calls this endpoint every 6 seconds
