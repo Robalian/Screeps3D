@@ -485,7 +485,11 @@ namespace Screeps_API
             server.Online = true;
             // TODO: timestamp of online status?
             server.Meta.Users = users;
-            server.Meta.Version = "v" + (packageVersion != null ? packageVersion.str : package.n.ToString());
+            server.Meta.Version = packageVersion != null
+                ? "v" + packageVersion.str
+                : package != null
+                    ? "v" + package.n.ToString()
+                    : "";
         }
 
         private void UpdateServerList()
