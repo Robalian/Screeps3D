@@ -359,7 +359,7 @@ namespace Screeps_API
             return Request("POST", "/api/game/create-construction", server, body, onSuccess: onSuccess, noNotification: noNotification);
         }
 
-        public IEnumerator<UnityWebRequestAsyncOperation> GetWorldStatus(Action<string> onSuccess, IScreepsServer server = null, bool noNotification = false)
+        public IEnumerator<UnityWebRequestAsyncOperation> GetWorldStatus(Action<string> onSuccess, IScreepsServer server, bool noNotification)
         {
             /*
              https://github.com/screepers/node-screeps-api/blob/HEAD/docs/Endpoints.md

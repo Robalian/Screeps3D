@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Assets.Scripts.Screeps_API;
+﻿using Assets.Scripts.Screeps_API;
 using Assets.Scripts.Screeps_API.ServerListProviders;
 using Assets.Scripts.Screeps3D.Main;
 using Common;
 using Screeps3D;
 using Screeps3D.Menus.ServerList;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,9 +47,9 @@ namespace Screeps_API
         private void Start()
         {
             GameManager.OnModeChange += OnModeChange;
-            serverListProviders.Add(new SS3UCFServerListProvider()); // Load all servers/credentials the user has supplied, it is important that this is the first entry.
             serverListProviders.Add(new OfficialServerListProvider()); // Add official servers, in case the user does not have any servers
             serverListProviders.Add(new OfficialCommunityServerListProvider()); // Add community servers provided by the official team.
+            serverListProviders.Add(new SS3UCFServerListProvider()); // Load all servers/credentials the user has supplied.
             // TODO: SS3 Unified Credentials File .ini
             // https://screeps.online/ ?
             
@@ -83,7 +84,7 @@ namespace Screeps_API
             // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
             UnityEditor.EditorApplication.isPlaying = false;
 #else
-         Application.Quit();
+            Application.Quit();
 #endif
         }
 
@@ -272,60 +273,44 @@ namespace Screeps_API
                     //Debug.LogError($"{provider.GetType()}");
                     foreach (var server in servers)
                     {
-                        if (provider.MergeWithCache)
+                        var existingServer = _servers.FirstOrDefault(s =>
                         {
-                            // TODO: a "display name" or the "name" property in the yaml file can be used to merge the different providers
+                            if (s.Address.HostName != server.Address.HostName)
+                                return false;
+                            if (s.Address.Path != server.Address.Path)
+                                return false;
+                            if (s.Address.Port != server.Address.Port)
+                                return false;
+                            return true;
+                        });
 
-                            //Debug.LogError($"{server.Name} => {server.Address.Http()}");
-
-                            if (!server.HasCredentials)
-                            {
-                                // Official community server does not have any credentials, we can however update entries from SS3 with the server name
-                                var existingServer = _servers.FirstOrDefault(s => s.HasCredentials
-                                && s.Address.HostName == server.Address.HostName
-                                && s.Address.Path == server.Address.Path
-                                && s.Address.Port == server.Address.Port);
-
-
-                                if (existingServer == null)
-                                {
-                                    _servers.Add(server);
-                                }
-                                else
-                                {
-
-                                    //Debug.LogError($"{server.Name} => {server.Address.Http()} ==> {existingServer.Address.Http()}");
-
-                                    existingServer.Name = server.Name;
-                                    existingServer.Meta.LikeCount = server.Meta.LikeCount;
-
-                                    // Update credentials
-                                    if (!string.IsNullOrEmpty(server.Credentials.Token))
-                                    {
-                                        existingServer.Credentials.Token = server.Credentials.Token;
-                                    }
-
-                                    if (!string.IsNullOrEmpty(server.Credentials.Email))
-                                    {
-                                        existingServer.Credentials.Email = server.Credentials.Email;
-                                    }
-
-                                    if (!string.IsNullOrEmpty(server.Credentials.Password))
-                                    {
-                                        existingServer.Credentials.Password = server.Credentials.Password;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // Add as a new server
-                                _servers.Add(server);
-                            }
+                        if (existingServer == null)
+                        {
+                            //Debug.Log($"{server.Name}, {server.Address.Path}, {server.Address.Port}");
+                            _servers.Add(server);
                         }
                         else
                         {
-                            _servers.AddRange(servers);
-                            // TODO: server icon
+                            if (server.Meta.LikeCount == 0)
+                            {
+                                existingServer.Meta.LikeCount = server.Meta.LikeCount;
+                            }
+
+                            // Update credentials
+                            if (!string.IsNullOrEmpty(server.Credentials.Token))
+                            {
+                                existingServer.Credentials.Token = server.Credentials.Token;
+                            }
+
+                            if (!string.IsNullOrEmpty(server.Credentials.Email))
+                            {
+                                existingServer.Credentials.Email = server.Credentials.Email;
+                            }
+
+                            if (!string.IsNullOrEmpty(server.Credentials.Password))
+                            {
+                                existingServer.Credentials.Password = server.Credentials.Password;
+                            }
                         }
 
                         QueryAndUpdateServerInfo(server);
@@ -341,7 +326,6 @@ namespace Screeps_API
                     // preselecting selected server might be an issue when the selected server status is not saved for like SS3
                     //_serverIndex = sortedCache.FindIndex(s => s.Selected);
 
-                    
 
                     finishedLoading = true;
                 });

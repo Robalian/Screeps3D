@@ -10,11 +10,6 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
     {
         private const string CACHE_FILE = "screeps.com.servers.list.json";
 
-        public bool MergeWithCache
-        {
-            get { return true; }
-        }
-
         public void Load(Action<IEnumerable<IScreepsServer>> callback)
         {
             var serverList = new List<IScreepsServer>();

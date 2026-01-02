@@ -12,11 +12,6 @@ namespace Assets.Scripts.Screeps_API.ServerListProviders
     /// </summary>
     class SS3UCFServerListProvider : IServerListProvider
     {
-        public bool MergeWithCache
-        {
-            get { return true; }
-        }
-
         public void Load(Action<IEnumerable<IScreepsServer>> callback)
         {
             try
